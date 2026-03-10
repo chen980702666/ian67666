@@ -20,25 +20,38 @@
       background: #eee; border-radius: 5px;
       cursor: pointer;
     }
-    #score {
+    #score, #moves {
       font-size: 20px; font-weight: bold; margin-top: 10px;
+    }
+    #message {
+      font-size: 22px; font-weight: bold; margin-top: 20px; color: red;
     }
   </style>
 </head>
 <body>
   <h1>三消遊戲</h1>
   <div id="score">分數：0</div>
+  <div id="moves">剩餘步數：20</div>
   <div id="board"></div>
+  <div id="message"></div>
   <script>
     const board = document.getElementById("board");
     const size = 8;
     const colors = ["🍎","🍋","🍇","🍒","🥝"];
     let grid = [];
     let score = 0;
+    let moves = 20; // 初始步數限制
+    const targetScore = 200; // 過關目標分數
 
     function updateScore(points) {
       score += points;
       document.getElementById("score").innerText = "分數：" + score;
+    }
+
+    function updateMoves() {
+      moves--;
+      document.getElementById("moves").innerText = "剩餘步數：" + moves;
+      if (moves <= 0) endGame();
     }
 
     function init() {
@@ -64,6 +77,7 @@
         swap(first, e.target);
         first.style.border = "";
         first = null;
+        updateMoves(); // 每次交換算一步
         checkMatches();
       }
     }
@@ -81,7 +95,8 @@
         for (let c=0; c<size-2; c++) {
           let i = r*size+c;
           if (grid[i].textContent === grid[i+1].textContent &&
-              grid[i].textContent === grid[i+2].textContent) {
+              grid[i].textContent === grid[i+2].textContent &&
+              grid[i].textContent !== "") {
             matched.push(i, i+1, i+2);
           }
         }
@@ -91,7 +106,8 @@
         for (let r=0; r<size-2; r++) {
           let i = r*size+c;
           if (grid[i].textContent === grid[i+size].textContent &&
-              grid[i].textContent === grid[i+2*size].textContent) {
+              grid[i].textContent === grid[i+2*size].textContent &&
+              grid[i].textContent !== "") {
             matched.push(i, i+size, i+2*size);
           }
         }
@@ -126,6 +142,17 @@
           grid[i].textContent = colors[Math.floor(Math.random()*colors.length)];
         });
       }
+    }
+
+    function endGame() {
+      let message = document.getElementById("message");
+      if (score >= targetScore) {
+        message.innerText = "🎉 恭喜過關！分數：" + score;
+      } else {
+        message.innerText = "❌ 遊戲失敗，分數：" + score;
+      }
+      // 停止操作
+      grid.forEach(cell => cell.removeEventListener("click", selectCell));
     }
 
     init();
