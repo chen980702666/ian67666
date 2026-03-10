@@ -20,20 +20,30 @@
       background: #eee; border-radius: 5px;
       cursor: pointer;
     }
+    #score {
+      font-size: 20px; font-weight: bold; margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>三消遊戲</h1>
+  <div id="score">分數：0</div>
   <div id="board"></div>
   <script>
     const board = document.getElementById("board");
     const size = 8;
     const colors = ["🍎","🍋","🍇","🍒","🥝"];
     let grid = [];
+    let score = 0;
 
-    // 初始化棋盤
+    function updateScore(points) {
+      score += points;
+      document.getElementById("score").textContent = "分數：" + score;
+    }
+
     function init() {
       grid = [];
+      board.innerHTML = "";
       for (let i=0; i<size*size; i++) {
         let cell = document.createElement("div");
         cell.className = "cell";
@@ -86,11 +96,13 @@
           }
         }
       }
-      // 消除並補充
       matched = [...new Set(matched)];
-      matched.forEach(i => {
-        grid[i].textContent = colors[Math.floor(Math.random()*colors.length)];
-      });
+      if (matched.length > 0) {
+        updateScore(matched.length * 10); // 每消除一格加 10 分
+        matched.forEach(i => {
+          grid[i].textContent = colors[Math.floor(Math.random()*colors.length)];
+        });
+      }
     }
 
     init();
