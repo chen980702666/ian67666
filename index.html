@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>小遊戲合集</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; background: #f0f0f0; }
+    h1 { margin-top: 50px; }
+    .menu {
+      display: flex; justify-content: center; gap: 30px; margin-top: 50px;
+    }
+    .game-link {
+      display: block; width: 150px; height: 150px;
+      background: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-decoration: none; color: #333; font-size: 20px; font-weight: bold;
+      display: flex; justify-content: center; align-items: center;
+      transition: transform 0.2s;
+    }
+    .game-link:hover { transform: scale(1.1); background: #e0e0e0; }
+  </style>
+</head>
+<body>
+  <h1>🎮 小遊戲合集</h1>
+  <div class="menu">
+    <a href="2048.html" class="game-link">2048</a>
+    <a href="match3.html" class="game-link">三消遊戲</a>
+  </div>
+</body>
+</html>
