@@ -100,6 +100,29 @@
       if (matched.length > 0) {
         updateScore(matched.length * 10); // 每消除一格加 10 分
         matched.forEach(i => {
+          grid[i].textContent = ""; // 清空格子
+        });
+        dropElements();
+        setTimeout(checkMatches, 300); // 連鎖檢查
+      }
+    }
+
+    function dropElements() {
+      for (let c=0; c<size; c++) {
+        let empty = [];
+        for (let r=size-1; r>=0; r--) {
+          let i = r*size+c;
+          if (grid[i].textContent === "") {
+            empty.push(i);
+          } else if (empty.length > 0) {
+            let target = empty.shift();
+            grid[target].textContent = grid[i].textContent;
+            grid[i].textContent = "";
+            empty.push(i);
+          }
+        }
+        // 最上方補新元素
+        empty.forEach(i => {
           grid[i].textContent = colors[Math.floor(Math.random()*colors.length)];
         });
       }
